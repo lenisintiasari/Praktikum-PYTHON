@@ -1,72 +1,114 @@
-nilai_siswa.csv
-pip install pandas matplotlib seaborn
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-data = pd.read_csv('nilai_siswa.csv')
 
-data.info()
-print(data.head())
-print(data.describe())
+# Next.js Dashboard Layout
 
-print('----------------------------------')
+Project ini adalah contoh struktur layout dashboard menggunakan **Next.js App Router**, dengan pemisahan komponen `Sidebar`, `Navbar`, dan `Root Layout` yang saling terhubung. Semua elemen sudah di-style menggunakan Tailwind CSS.
 
-print("rata-rata:", data['Nilai'].mean())
-print("median:", data['Nilai'].median())
-print("modus:", data['Nilai'].mode()[0])
+---
 
-print('----------------------------------')
+##  Fitur
+- Layout global menggunakan `app/layout.js`
+- Sidebar muncul di semua halaman
+- Navbar berada di bagian atas secara full width
+- Konten halaman otomatis ter-wrap dengan layout
+- Komponen terpisah: `Sidebar.jsx` dan `Navbar.jsx`
 
-matematika = data[data['Matpel'] == 'Matematika']
-print("rata-rata matematika:", matematika['Nilai'].mean())
-print("median matematika:", matematika['Nilai'].median())
-print("modus matematika:", matematika['Nilai'].mode()[0])
-print(matematika)
+---
 
-print('----------------------------------')
+##  Struktur Folder
+```
+app/
+│── layout.js
+│── page.js
+│── globals.css
+components/
+│── Sidebar.jsx
+│── Navbar.jsx
+```
 
-bahasaindonesia = data[data['Matpel'] == 'Bahasa Indonesia']
-print("rata-rata bahasa indonesia:", bahasaindonesia['Nilai'].mean())
-print("median bahasa indonesia:", bahasaindonesia['Nilai'].median())
-print("modus bahasa indonesia:", bahasaindonesia['Nilai'].mode()[0])
-print(bahasaindonesia)
+---
 
-print('----------------------------------')
+##  Kode Lengkap
 
-bahasainggris = data[data['Matpel'] == 'Bahasa Inggris']
-print("rata-rata bahasa inggris:", bahasainggris['Nilai'].mean())
-print("median bahasa inggris:", bahasainggris['Nilai'].median())
-print("modus bahasa inggris:", bahasainggris['Nilai'].mode()[0])
-print(bahasainggris)
+### **app/layout.js**
+```jsx
+import Sidebar from "@/components/Sidebar";
+import Navbar from "@/components/Navbar";
+import "./globals.css";
 
-print('----------------------------------')
+export const metadata = {
+  title: "Dashboard",
+  description: "Dashboard with sidebar and navbar",
+};
 
-produktif = data[data['Matpel'] == 'Produktif']
-print("rata-rata produktif:", produktif['Nilai'].mean())
-print("median produktif:", produktif['Nilai'].median())
-print("modus produktif:", produktif['Nilai'].mode()[0])
-print(produktif)
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body className="flex h-screen">
+        <Sidebar />
 
-print('----------------------------------')
+        <div className="flex flex-col flex-1">
+          <Navbar />
+          <main className="p-6 bg-gray-100 h-full">
+            {children}
+          </main>
+        </div>
+      </body>
+    </html>
+  );
+}
+```
 
-fisika = data[data['Matpel'] == 'Fisika']
-print("rata-rata fisika:", fisika['Nilai'].mean())
-print("median fisika:", fisika['Nilai'].median())
-print("modus fisika:", fisika['Nilai'].mode()[0])
-print(fisika)
+---
 
-print('----------------------------------')
+### **components/Sidebar.jsx**
+```jsx
+export default function Sidebar() {
+  return (
+    <aside className="w-64 bg-gray-900 text-white h-full p-6">
+      <h2 className="text-xl font-bold mb-4">Sidebar</h2>
+      <ul className="space-y-3">
+        <li>Dashboard</li>
+        <li>Users</li>
+        <li>Settings</li>
+      </ul>
+    </aside>
+  );
+}
+```
 
-data.groupby('Matpel')['Nilai'].agg(['max','min'])
-rata = data.groupby('Matpel')['Nilai'].mean()
-rata.plot(kind='bar')
-plt.title('Rata-Rata Nilai per Matpel')
-plt.xlabel('Mata Pelajaran')
-plt.ylabel('Nilai Rata-Rata')
-plt.tight_layout()
-plt.show()
+---
 
-sns.boxplot(x='Matpel', y='Nilai', data=data)
-plt.title('Sebaran Nilai per Mata Pelajaran')
-plt.tight_layout()
-plt.show()
+### **components/Navbar.jsx**
+```jsx
+export default function Navbar() {
+  return (
+    <nav className="w-full bg-pink-500 text-white p-4">
+      <h1 className="text-lg font-semibold">Navbar</h1>
+    </nav>
+  );
+}
+```
+
+---
+
+### **app/page.js**
+```jsx
+export default function HomePage() {
+  return (
+    <div className="bg-white p-6 rounded-xl shadow">
+      <h1 className="text-2xl font-bold mb-4">Home Page</h1>
+      <p>Selamat datang di dashboard!</p>
+    </div>
+  );
+}
+```
+
+---
+
+##  Cara Menjalankan
+```
+npm install
+npm run dev
+```
+
+---
